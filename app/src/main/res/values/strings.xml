@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Notedroid V4</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Home</string>
+
+    <string name="txt_mi_search">Search</string>
+    <string name="txt_mi_save">Save</string>
+
+    <string name="txt_btn_delete">Delete</string>
+    <string name="txt_btn_details">Details</string>
+
+    <string name="txt_hint_et_title">Title</string>
+    <string name="txt_hint_et_content">Content</string>
+</resources>
