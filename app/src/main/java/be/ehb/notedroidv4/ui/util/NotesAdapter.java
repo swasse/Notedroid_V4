@@ -1,4 +1,4 @@
-package be.ehb.notedroidv4.util;
+package be.ehb.notedroidv4.ui.util;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -43,7 +43,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             btnDelete.setOnClickListener(deleteListener);
             card = itemView.findViewById(R.id.note_card);
             card.setOnClickListener(detailsListener);
-
         }
 
         private View.OnClickListener deleteListener = new View.OnClickListener() {
@@ -53,8 +52,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 Note toDelete = shownNotes.get(pos);
 
                 NoteViewModel model = new ViewModelProvider(activity).get(NoteViewModel.class);
-                allNotes.remove(toDelete);
-                shownNotes.remove(toDelete);
                 model.deleteNote(toDelete);
                 notifyDataSetChanged();
             }
@@ -101,7 +98,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         return shownNotes.size();
     }
 
-    public void addItems(ArrayList<Note> items) {
+    public void addItems(List<Note> items) {
+        shownNotes.clear();
+        allNotes.clear();
         shownNotes.addAll(items);
         allNotes.addAll(items);
     }

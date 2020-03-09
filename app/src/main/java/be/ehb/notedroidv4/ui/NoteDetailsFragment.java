@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -32,8 +33,16 @@ public class NoteDetailsFragment extends Fragment {
 
     private EditText etTitle, etContent;
     private Note selected;
+    private FragmentActivity myContext;
 
     public NoteDetailsFragment() {
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        myContext = (FragmentActivity) context;
     }
 
     public static NoteDetailsFragment newInstance(){
@@ -70,22 +79,21 @@ public class NoteDetailsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.mi_save) {
-            NoteViewModel model = new ViewModelProvider(getActivity()).get(NoteViewModel.class);
+            NoteViewModel model = new ViewModelProvider(myContext).get(NoteViewModel.class);
             //new
             if(selected == null) {
                 Note n = new Note(etTitle.getText().toString(), etContent.getText().toString());
-                model.addNote(n);
+                model.insertNote(n);
             }
             else {
                 selected.setTitle(etTitle.getText().toString());
                 selected.setContent(etContent.getText().toString());
                 selected.setLastModifiedDate(LocalDate.now());
-
-                //TODO in real app with database
+                model.updateNote(selected);
             }
             Navigation.findNavController(getView()).navigateUp();
         }
-        hideKeyboardFrom(getActivity(), getView().getRootView());
+        hideKeyboardFrom(myContext, getView().getRootView());
         return super.onOptionsItemSelected(item);
     }
 

@@ -1,12 +1,20 @@
 package be.ehb.notedroidv4.model;
 
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import org.threeten.bp.LocalDate;
 
 import java.io.Serializable;
 
+@Entity
 public class Note implements Serializable {
 
+	//attributes in tabel = variabelen in klasse
+	@PrimaryKey(autoGenerate = true)
+	private long id;
 	private String title;
 	private String content;
 	private LocalDate publishDate;
@@ -16,6 +24,7 @@ public class Note implements Serializable {
     public Note() {
     }
 
+    @Ignore
     public Note(String title, String content) {
 		this.title = title;
 		this.content = content;
@@ -24,6 +33,10 @@ public class Note implements Serializable {
 	}
 
     //getters en setters
+
+	public long getId() {
+		return id;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -36,6 +49,9 @@ public class Note implements Serializable {
     public LocalDate getLastModifiedDate() {
         return lastModifiedDate;
     }
+	public void setId(long id) {
+		this.id = id;
+	}
 	public void setTitle(String title) {
 		this.title = title;
 	}

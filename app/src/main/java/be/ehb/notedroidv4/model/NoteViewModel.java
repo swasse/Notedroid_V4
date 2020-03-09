@@ -1,40 +1,60 @@
 package be.ehb.notedroidv4.model;
 
-import androidx.lifecycle.MutableLiveData;
+import android.app.Application;
+import android.content.Context;
+
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
 
 /**
  * Created by Banaan on 20/01/2038. ;)
  */
-public class NoteViewModel extends ViewModel {
 
-    private MutableLiveData<ArrayList<Note>> notes;
 
-    public MutableLiveData<ArrayList<Note>> getNotes() {
-        if(notes == null){
-            notes = new MutableLiveData<>();
-            loadNotes();
-        }
+public class NoteViewModel extends AndroidViewModel {
 
+    private final LiveData<List<Note>> notes;
+    private NotesDatabase database;
+
+    public NoteViewModel(Application application) {
+        super(application);
+        database = NotesDatabase.getInstance(application);
+        notes = database.getRepoDao().getAllNotes();
+    }
+
+    public LiveData<List<Note>> getNotes() {
         return notes;
     }
 
-    public void addNote(Note n){
-        notes.getValue().add(n);
+    //tricky, not allowed to access on main thread
+    public void insertNote(Note n){
+        NotesDatabase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                database.getRepoDao().insertNote(n);
+            }
+        });
     }
 
-    public void deleteNote(Note n) {
-        notes.getValue().remove(n);
+    public void updateNote(Note n){
+        NotesDatabase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                database.getRepoDao().updateNote(n);
+            }
+        });
     }
 
-    private void loadNotes() {
-        ArrayList<Note> tempList = new ArrayList<>();
-
-        tempList.add(new Note("Eerste", "Comment"));
-
-        notes.setValue(tempList);
+    public void deleteNote(Note n){
+        NotesDatabase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                database.getRepoDao().deleteNote(n);
+            }
+        });
     }
+
 }
