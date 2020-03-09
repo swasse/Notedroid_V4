@@ -2,6 +2,8 @@ package be.ehb.notedroidv4.model;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -16,16 +18,28 @@ import java.util.List;
 
 public class NoteViewModel extends AndroidViewModel {
 
-    private final LiveData<List<Note>> notes;
+    private LiveData<List<Note>> notes;
     private NotesDatabase database;
+    private final Application mApplication;
 
     public NoteViewModel(Application application) {
         super(application);
+        mApplication = application;
         database = NotesDatabase.getInstance(application);
+
         notes = database.getRepoDao().getAllNotes();
     }
 
     public LiveData<List<Note>> getNotes() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mApplication);
+        String chosen = prefs.getString("pref_order", "Alfabetical");
+        switch (chosen){
+            case "Alfabetical": notes = database.getRepoDao().getAllNotes();
+            break;
+            case "Chronological": notes = database.getRepoDao().getAllNotesChronological();
+            break;
+        }
+
         return notes;
     }
 

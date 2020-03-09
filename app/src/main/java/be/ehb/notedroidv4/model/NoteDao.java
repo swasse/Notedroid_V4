@@ -12,9 +12,13 @@ import java.util.List;
 @Dao
 public interface NoteDao {
 
-    @Query("SELECT * FROM Note")
+    @Query("SELECT * FROM Note ORDER BY title")
     LiveData<List<Note>> getAllNotes();
 
+    @Query("SELECT * FROM Note ORDER BY lastModifiedDate ASC")
+    LiveData<List<Note>> getAllNotesChronological();
+
+    //niet gebruikt, voorbeeld om parameter in query mee te geven
     @Query("SELECT * FROM Note WHERE id = :id ")
     Note findByID(long id);
 

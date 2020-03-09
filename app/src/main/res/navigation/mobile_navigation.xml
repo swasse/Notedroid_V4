@@ -22,5 +22,8 @@
             app:argType="be.ehb.notedroidv4.model.Note"
             app:nullable="true" />
     </fragment>
+    <fragment
+        android:id="@+id/settings"
+        android:name="be.ehb.notedroidv4.ui.PrefFragment" />
 
 </navigation>
